@@ -5,7 +5,7 @@ from gensim import models
 import matplotlib.pyplot as plt
 import os
 from tensorflow import keras
-from keras import mo
+
 
 def preprocessing(data):
     data.drop_duplicates(subset=['document'], inplace=True)
@@ -54,6 +54,21 @@ def fasttext_vectorize(padded_sentences, max_len = 40):
     final_array = paddedarray.reshape(-1,max_len,300)
     return final_array
 
+def simple_fasttext_vectorize(padded_sentences, max_len = 40):
+    with open('simple_ko_vec.pkl','rb') as fw:
+        simple_w2v= pickle.load(fw)
+    ko_model = models.fasttext.load_facebook_model('cc.ko.300.bin')
+    paddedarray=[]
+    try:
+        for x in padded_sentences:
+            for token in x:
+                paddedarray.append(simple_w2v[token])
+        # paddedarray = np.array([simple_w2v[token] for x in padded_sentences for token in x])
+    except:
+        paddedarray.append(simple_w2v['얘쁜'])## 사전에 없는 단어는 0행렬 만듬 ['얘쁜']의 행렬이 0행렬이라 이렇게 그냥 썼음
+    final_array = paddedarray.reshape(-1,max_len,300)
+    return final_array
+
 def plot_graphs(history, string, name='model'):
     plt.plot(history.history[string])
     plt.plot(history.history['val_' + string])
@@ -74,15 +89,13 @@ def plot_graphs(history, string, name='model'):
 #######  model1:fastext이용 ###########
 ###################################### 
 def model_1():
-    embedding_dim = 200
+    # embedding_dim = 200
     filter_sizes = (3, 4, 5)
     num_filters = 100
     dropout = 0.5
     hidden_dims = 10
     batch_size = 50
     num_epochs = 10
-    min_word_count = 1
-    context = 10
     conv_blocks = []
     sequence_length = 200
 
