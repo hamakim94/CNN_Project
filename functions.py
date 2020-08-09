@@ -96,6 +96,16 @@ def plot_graphs(history, string, name='model'):
     print('<{}.png> result_file폴더에 결과 그래프 저장 완료'.format(name))
 
 
+def token_padded(sentences):
+  tokenizer = Tokenizer(num_words=vocab_size, oov_token=oov_tok)
+  tokenizer.fit_on_texts(sentences)
+  word_index = tokenizer.word_index
+  sequences  = tokenizer.texts_to_sequences(sentences)
+  padded = pad_sequences(sequences, maxlen=max_length, 
+                                  padding=padding_type, truncating=truct_type)
+  return padded
+
+    
 ######################################
 #######  model1:fastext이용 ###########
 ###################################### 
@@ -243,6 +253,4 @@ SVG(model_to_dot(model, show_layer_names=True, dpi=65).create(prog='dot', format
 plot_accuracy_graphs(history)
 plot_loss_graphs(history)
     
-
-
 
