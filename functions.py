@@ -16,6 +16,8 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from IPython.display import SVG
 from tensorflow.python.keras.utils.vis_utils import model_to_dot
+from gensim.models import Word2Vec
+import re
 
 
 def preprocessing(data):
@@ -95,16 +97,6 @@ def plot_graphs(history, string, name='model'):
     plt.savefig(result_dir+'/{}.png'.format(name))
     print('<{}.png> result_file폴더에 결과 그래프 저장 완료'.format(name))
 
-
-def token_padded(sentences):
-  tokenizer = Tokenizer(num_words=vocab_size, oov_token=oov_tok)
-  tokenizer.fit_on_texts(sentences)
-  word_index = tokenizer.word_index
-  sequences  = tokenizer.texts_to_sequences(sentences)
-  padded = pad_sequences(sequences, maxlen=max_length, 
-                                  padding=padding_type, truncating=truct_type)
-  return padded
-
     
 ######################################
 #######  model1:fastext이용 ###########
@@ -147,6 +139,12 @@ def model_1():
     # model.compile(optimizer='adam', loss='mse')
 
     return model 
+
+#########################################
+#######  model2:word2vec 이용 ###########
+#########################################
+
+
 
 
 ######################################
