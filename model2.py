@@ -1,7 +1,4 @@
 
-
-# Commented out IPython magic to ensure Python compatibility.
-# %matplotlib inline
 import matplotlib.pyplot as plt
 import re
 from konlpy.tag import Okt
