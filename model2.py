@@ -11,14 +11,14 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 import functions as fc
 
 from gensim.models import Word2Vec
-ko_model= Word2Vec.load('/content/drive/My Drive/ CNN_project/word2vec_movie.model') # word2vec 모델 로드
+ko_model= Word2Vec.load('word2vec_movie.model') # word2vec 모델 로드
 
 # train, test 데이터 불러오기
 import pickle
 import pandas as pd
 
-test = pd.read_pickle("/content/drive/My Drive/ CNN_project/token_test_data.pkl")
-train = pd.read_pickle("/content/drive/My Drive/ CNN_project/token_train_data.pkl")
+test = pd.read_pickle("token_test_data.pkl")
+train = pd.read_pickle("token_train_data.pkl")
 
 training_sentences, training_labels = train['tokens'], train['labels']
 testing_sentences, testing_labels = test['tokens'], test['labels']
