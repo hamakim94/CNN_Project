@@ -238,8 +238,9 @@ def m2_model():
   training_padded, testing_padded, training_labels,testing_labels,embedding_matrix, vocab_size = m2_tokenizer()
   embedding = tf.keras.layers.Embedding(vocab_size, embedding_dim, input_length=max_length,
                                           weights = [embedding_matrix], trainable = False)(z)
-  
+                                          
   for sz in filter_sizes:
+      
 
       conv = tf.keras.layers.Conv1D(filters=num_filters,
                           kernel_size=sz,

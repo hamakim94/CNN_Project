@@ -5,6 +5,9 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import functions as fc
 
+'''
+you touto u
+'''
 max_len = 30
 
 df_train = pd.read_pickle('token_train_data.pkl')
