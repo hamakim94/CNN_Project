@@ -2,7 +2,7 @@ from tensorflow import keras
 import os
 from IPython.display import SVG
 from tensorflow.python.keras.utils.vis_utils import model_to_dot
-
+from functions import tokenize
 
 doc = [
     '영화 졸라 재미없다',
@@ -11,19 +11,13 @@ doc = [
     '시간이 아깝다'
     '아주 재미지네요 하하하ㅏ'
 ]
+y= [0,0,0,0,1]
+
+X = input_preprocessing(doc)
+
+model = restore_model('model1')
 
 
-checkpoint_dir = './ckpt1'
-
-def restore_model():
-    # Either restore the latest model, or create a fresh one
-    # if there is no checkpoint available.
-    checkpoints = [checkpoint_dir + '/' + name
-                   for name in os.listdir(checkpoint_dir)]
-
-    latest_checkpoint = max(checkpoints, key=os.path.getctime)
-    print('Restoring from', latest_checkpoint)
-    return keras.models.load_model(latest_checkpoint)
 
 
 model = restore_model()

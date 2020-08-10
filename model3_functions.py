@@ -12,6 +12,7 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from IPython.display import SVG
 from tensorflow.python.keras.utils.vis_utils import model_to_dot
+from functions import ready_callbacks
 
 path_q = input('데이터가 현재 폴더위치에 있습니까?[y/n]')
 
@@ -94,7 +95,8 @@ def model3_context(path, dropout = 0.5, embedding_dim = 100, max_length=30, batc
 
   model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
   early_stopping=tf.keras.callbacks.EarlyStopping(patience=2)
-  history = model.fit(training_padded, training_labels, epochs=num_epochs, validation_data=(testing_padded, testing_labels), callbacks=[early_stopping], batch_size = batch_size)
+  call_back = ready_callbacks(dir = 'ckpt3')
+  history = model.fit(training_padded, training_labels, epochs=num_epochs, validation_data=(testing_padded, testing_labels), callbacks=call_back, batch_size = batch_size)
 
 
   return model, history
