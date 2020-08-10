@@ -25,7 +25,7 @@ num_filters = 100
 dropout = 0.5
 hidden_dims = 10
 batch_size = 50
-num_epochs = 10
+num_epochs = 2
 min_word_count = 1
 context = 10
 conv_blocks = []
@@ -43,11 +43,13 @@ callbacks = [
     # We include the training loss in the folder name.
     keras.callbacks.ModelCheckpoint(
         filepath=checkpoint_dir + '/ckpt-loss={loss:.3f}',
-        save_freq=500)
+        monitor='val_loss',
+        save_best_only=True)
 ]
-history = model.fit(final_train_data, train_lable, epochs=10, callbacks=callbacks, batch_size = batch_size, validation_data=(final_test_data, test_lable))
+history = model.fit(final_train_data, train_lable, epochs=num_epochs, callbacks=callbacks, batch_size = batch_size, validation_data=(final_test_data, test_lable))
 
 #CNN 모델에 fit한 history, string: ('accuracy'or'loss'), name : 해당이름으로 차트title과 차트파일명이 됨
 #result_file폴더에 결과 그래프 저장
+
 fc.plot_graphs(history, 'accuracy',name='model1_acc')
 fc.plot_graphs(history, 'loss', name='model1_loss')

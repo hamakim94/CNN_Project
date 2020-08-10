@@ -5,9 +5,6 @@ from gensim import models
 import matplotlib.pyplot as plt
 import os
 from tensorflow import keras
-<<<<<<< HEAD
-import pickle
-=======
 import tensorflow as tf
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
@@ -19,7 +16,6 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from IPython.display import SVG
 from tensorflow.python.keras.utils.vis_utils import model_to_dot
->>>>>>> ed486f48ee92f40a6c676dac8fe03db3dd85b69f
 
 max_len = 30
 
@@ -33,6 +29,10 @@ def preprocessing(data):
     label = data['label']
     print('data len = {}'.format(len(sentences)))
     return sentences, label
+
+def input_preprocessing(data):
+    pass
+
 
 def tokenize(sentence):
     okt = Okt()
@@ -85,6 +85,7 @@ def simple_fasttext_vectorize(padded_sentences, max_len = max_len):
     final_array = paddedarray.reshape(-1,max_len,300)
     return final_array
 
+
 def plot_graphs(history, string, name='model'):
     plt.plot(history.history[string])
     plt.plot(history.history['val_' + string])
@@ -92,15 +93,15 @@ def plot_graphs(history, string, name='model'):
     plt.ylabel(string)
     plt.title(name)
     plt.legend([string, 'val_' + string])
-    
+
+    fig = plt.gcf()
     ##저장될 폴더생성
     result_dir = './result_file'
     if not os.path.exists(result_dir):
         os.makedirs(result_dir)
-    plt.savefig(result_dir+'/{}.png'.format(name))
-    plt.show() #결과 그냥 저장할거라 주석처리해도됨
+    fig.savefig(result_dir+'/{}.png'.format(name), dpi = fig.dpi)
     print('<{}.png> result_file폴더에 결과 그래프 저장 완료'.format(name))
-
+    plt.show()
 
 def token_padded(sentences):
   tokenizer = Tokenizer(num_words=vocab_size, oov_token=oov_tok)
@@ -250,14 +251,14 @@ def plot_loss_graphs(history, string='loss'):
 
 
 
-# model 3 실행법 
-path = os.getcwd() #이런식으로 데이터 파일이 있는 path 지정 
+# # model 3 실행법 
+# path = os.getcwd() #이런식으로 데이터 파일이 있는 path 지정 
 
-model, history = model3_context(path) #모델실행 
+# model, history = model3_context(path) #모델실행 
 
-#모델 그래프, 정확도 그래프, loss그래프 출력 
-SVG(model_to_dot(model, show_layer_names=True, dpi=65).create(prog='dot', format='svg'))
-plot_accuracy_graphs(history)
-plot_loss_graphs(history)
+# #모델 그래프, 정확도 그래프, loss그래프 출력 
+# SVG(model_to_dot(model, show_layer_names=True, dpi=65).create(prog='dot', format='svg'))
+# plot_accuracy_graphs(history)
+# plot_loss_graphs(history)
     
 
