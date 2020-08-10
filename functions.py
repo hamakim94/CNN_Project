@@ -281,7 +281,7 @@ def m2_model():
   return model, history, accuracy_graph,loss_graph
 
 # model2 실행및 그래프 생성
-model, history, accuracy_graph,loss_graph = m2_model()
+# model, history, accuracy_graph,loss_graph = m2_model()
 
 
 ######################################
