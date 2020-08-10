@@ -53,7 +53,8 @@ def tokenize(sentence):
         tokenized_sentence.append(result)
 
     return tokenized_sentence
-            
+
+# 밑에꺼랑 같은데 영화리뷰 토큰화된거 사용하려고 만듬            
 def input_preprocessing2(tokens):
     with open('tokenizer.pickle','rb') as f:
         tokenizer = pickle.load(f)
@@ -66,7 +67,6 @@ def input_preprocessing2(tokens):
 
 
 def input_preprocessing(sentences):
-
     tokens = tokenize(sentences)
     ######tokenizer 불러오기 vocab size = 20000으로 되어있는 거임
     with open('tokenizer.pickle','rb') as f:
@@ -154,7 +154,7 @@ def ready_callbacks(dir = './ckpt1'):
         # This callback saves a SavedModel every 100 batches.
         # We include the training loss in the folder name.
         keras.callbacks.ModelCheckpoint(
-            filepath=checkpoint_dir + '/ckpt-loss={loss:.3f}',
+            filepath=checkpoint_dir + '/ckpt-loss={loss:.2f}',
             monitor='val_loss',
             save_best_only=True)
     ]

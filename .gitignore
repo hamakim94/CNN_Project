@@ -1,3 +1,4 @@
+*.data*
 ckpt1/*
 result_file/*
 cc.ko.300.vec

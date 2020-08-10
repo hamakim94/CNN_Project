@@ -4,23 +4,8 @@ from tensorflow import keras
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import functions as fc
-from functions import input_preprocessing, preprocessing, CNN_model_1, input_preprocessing2
+from functions import input_preprocessing, preprocessing, CNN_model_1, input_preprocessing2, ready_callbacks
 
-def ready_callbacks():
-    import os #폴더 생성
-    checkpoint_dir = './ckpt1'
-    if not os.path.exists(checkpoint_dir):
-        os.makedirs(checkpoint_dir)
-    callbacks = [
-        keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=0),
-        # This callback saves a SavedModel every 100 batches.
-        # We include the training loss in the folder name.
-        keras.callbacks.ModelCheckpoint(
-            filepath=checkpoint_dir + '/ckpt-loss={loss:.3f}',
-            monitor='val_loss',
-            save_best_only=True)
-    ]
-    return callbacks
 
 if __name__ == "__main__":
     
@@ -52,7 +37,7 @@ if __name__ == "__main__":
                         hidden_dims = 10,
                         max_len = 30)
         
-    callbacks = ready_callbacks()
+    callbacks = ready_callbacks('ckpt1')
 
     # 모델 fit 시키기
     batch_size = 50
