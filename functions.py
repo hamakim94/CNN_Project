@@ -150,6 +150,17 @@ def CNN_model_1(num_filters=100, hidden_dims = 10, filter_sizes = (3, 4, 5), l2_
 #########################################
 #######  model2:word2vec 이용 ###########
 #########################################
+
+''' 
+  You need to check the path of these.
+
+  test = pd.read_pickle("token_test_data.pkl")
+  train = pd.read_pickle("token_train_data.pkl")
+  ko_model= Word2Vec.load('word2vec_movie.model')
+
+  plz add these files in the right folder.
+'''
+
 def m2_load_token_and_label():
 
   test = pd.read_pickle("/content/drive/My Drive/ CNN_project/token_test_data.pkl")
