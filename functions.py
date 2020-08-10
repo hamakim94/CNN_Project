@@ -174,8 +174,8 @@ def CNN_model_1(num_filters=100, hidden_dims = 10, filter_sizes = (3, 4, 5), l2_
 
 def m2_load_token_and_label():
 
-  test = pd.read_pickle("/content/drive/My Drive/ CNN_project/token_test_data.pkl")
-  train = pd.read_pickle("/content/drive/My Drive/ CNN_project/token_train_data.pkl")
+  test = pd.read_pickle("token_test_data.pkl")
+  train = pd.read_pickle("token_train_data.pkl")
 
   training_sentences, training_labels = train['tokens'], train['labels']
   testing_sentences, testing_labels = test['tokens'], test['labels']
@@ -212,7 +212,7 @@ def m2_tokenizer():
   embedding_dim = 200
 
   embedding_matrix = np.zeros((vocab_size, embedding_dim))
-  ko_model= Word2Vec.load('/content/drive/My Drive/ CNN_project/word2vec_movie.model')
+  ko_model= Word2Vec.load('word2vec_movie.model')
 
   for word, idx in tokenizer.word_index.items():
       embedding_vector = ko_model[word] if word in ko_model else None
@@ -236,10 +236,11 @@ def m2_model():
   z = model_input
 
   training_padded, testing_padded, training_labels,testing_labels,embedding_matrix, vocab_size = m2_tokenizer()
+  embedding = tf.keras.layers.Embedding(vocab_size, embedding_dim, input_length=max_length,
+                                          weights = [embedding_matrix], trainable = False)(z)
   
   for sz in filter_sizes:
-      embedding = tf.keras.layers.Embedding(vocab_size, embedding_dim, input_length=max_length,
-                                          weights = [embedding_matrix], trainable = False)(z)
+
       conv = tf.keras.layers.Conv1D(filters=num_filters,
                           kernel_size=sz,
                           padding="valid",
