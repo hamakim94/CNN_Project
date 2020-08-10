@@ -103,7 +103,6 @@ def plot_graphs(history, string, name='model'):
         os.makedirs(result_dir)
     fig.savefig(result_dir+'/{}.png'.format(name), dpi = fig.dpi)
     print('<{}.png> result_file폴더에 결과 그래프 저장 완료'.format(name))
-<<<<<<< HEAD
     plt.show()
 
 def token_padded(sentences):
@@ -114,8 +113,6 @@ def token_padded(sentences):
   padded = pad_sequences(sequences, maxlen=max_length, 
                                   padding=padding_type, truncating=truct_type)
   return padded
-=======
->>>>>>> 42cd95bac92b3bd9e7776734daf338aeffc0d9e8
 
     
 ######################################
