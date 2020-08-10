@@ -23,14 +23,14 @@ from functions import input_preprocessing, preprocessing, CNN_model_1, input_pre
     ###   <data 준비시키기 시간절약 version>    ###
     ###  토큰화되어 저장한 train test data이용  ###
     ###########################################
-    df_train = pd.read_pickle('token_train_data.pkl')
-    df_test = pd.read_pickle('token_test_data.pkl')
+df_train = pd.read_pickle('token_train_data.pkl')
+df_test = pd.read_pickle('token_test_data.pkl')
 
-    train_data, train_lable = df_train['tokens'], df_train['labels']
-    test_data, test_lable = df_test['tokens'], df_test['labels']
+train_data, train_lable = df_train['tokens'], df_train['labels']
+test_data, test_lable = df_test['tokens'], df_test['labels']
 
-    X_train, y_train = input_preprocessing2(train_data), train_lable
-    X_test, y_test = input_preprocessing2(test_data), test_lable
+X_train, y_train = input_preprocessing2(train_data), train_lable
+X_test, y_test = input_preprocessing2(test_data), test_lable
 
 if __name__ == "__main__":
     
