@@ -12,6 +12,7 @@ from gensim.models import Word2Vec
 import os
 from tensorflow import keras
 
+
 ''' 
   You need to check the path of these.
 
@@ -21,6 +22,17 @@ from tensorflow import keras
 
   plz add these files in the right folder.
 '''
+
+def naver_w2v():
+  df_train = pd.read_pickle('token_train_data.pkl')
+  df_test = pd.read_pickle('token_test_data.pkl')
+  df = pd.concat([df_train, df_test], axis = 0, ignore_index=True)
+
+  token = [i  for x in df['tokens'] for i in x]
+
+  model = Word2Vec(sentences =token , size = 200, window = 5, min_count = 5, workers = 4, sg = 0)
+  model.save('word2vec_movie.model')
+
 
 # made by ChangYoon
 def plot_graphs(history, string, name='model'):
@@ -104,9 +116,10 @@ def m2_model():
 
   training_padded, testing_padded, training_labels,testing_labels,embedding_matrix, vocab_size = m2_tokenizer()
   
+  embedding = tf.keras.layers.Embedding(vocab_size, embedding_dim, input_length=max_length,
+                                          weights = [embedding_matrix], trainable = False)(z)  
   for sz in filter_sizes:
-      embedding = tf.keras.layers.Embedding(vocab_size, embedding_dim, input_length=max_length,
-                                          weights = [embedding_matrix], trainable = False)(z)
+
       conv = tf.keras.layers.Conv1D(filters=num_filters,
                           kernel_size=sz,
                           padding="valid",
@@ -145,5 +158,6 @@ def m2_model():
 
   return model, history, accuracy_graph,loss_graph
 
-# Model2 실행 및 그래프 작성
-model, history, accuracy_graph,loss_graph = m2_model()
+
+
+model, history, accuracy_graph,loss_graph = m2_model() # Model2 실행 및 그래프 작성
