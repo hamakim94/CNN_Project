@@ -2,21 +2,22 @@ import pickle
 import pandas as pd
 from tensorflow import keras
 import tensorflow as tf
-from keras.callbacks import TensorBoard
 import matplotlib.pyplot as plt
+import functions as fc
+
+max_len = 30
 
 df_train = pd.read_pickle('token_train_data.pkl')
 df_test = pd.read_pickle('token_test_data.pkl')
 
 token_train_data, train_lable = df_train['tokens'], df_train['labels']
 token_test_data, test_lable = df_test['tokens'], df_test['labels']
-import functions as fc
-
-max_len=40
-final_train_data = fc.fasttext_vectorize(fc.pad_sequence(token_train_data), max_len=max_len)
-final_test_data = fc.fasttext_vectorize(fc.pad_sequence(token_test_data), max_len=max_len)
 
 
+final_train_data = fc.simple_fasttext_vectorize(fc.pad_sequence(token_train_data))
+final_test_data = fc.simple_fasttext_vectorize(fc.pad_sequence(token_test_data))
+
+print(len(final_test_data))
 ######
 embedding_dim = 200
 filter_sizes = (3, 4, 5)
@@ -30,26 +31,7 @@ context = 10
 conv_blocks = []
 sequence_length = 200
 
-# input_shape = (sequence_length, embedding_dim) # input shape for
-input_shape = (max_len, 300) # input shape for data, (max_length of sent, vect)
-
-model_input = keras.layers.Input(shape=input_shape)
-z = model_input
-for sz in filter_sizes:
-    conv = keras.layers.Conv1D(filters=num_filters,
-                         kernel_size=sz,
-                         padding="valid",
-                         activation="relu",
-                         strides=1)(z)
-    conv = keras.layers.MaxPooling1D(pool_size=2)(conv)
-    conv = keras.layers.Flatten()(conv)
-    conv_blocks.append(conv)
-z = keras.layers.Concatenate()(conv_blocks) if len(conv_blocks) > 1 else conv_blocks[0]
-z = keras.layers.Dense(hidden_dims, activation="relu", kernel_regularizer=keras.regularizers.l2(0.003), bias_regularizer=keras.regularizers.l2(0.003))(z)
-z = keras.layers.Dropout(dropout)(z)
-model_output = keras.layers.Dense(1, activation="sigmoid")(z)
-model = keras.Model(model_input, model_output)
-model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
+model = fc.CNN_model_1()
 
 import os #폴더 생성
 checkpoint_dir = './ckpt1'
@@ -67,7 +49,5 @@ history = model.fit(final_train_data, train_lable, epochs=10, callbacks=callback
 
 #CNN 모델에 fit한 history, string: ('accuracy'or'loss'), name : 해당이름으로 차트title과 차트파일명이 됨
 #result_file폴더에 결과 그래프 저장
-
-
-plot_graphs(history, 'accuracy')
-plot_graphs(history, 'loss')
+fc.plot_graphs(history, 'accuracy',name='model1_acc')
+fc.plot_graphs(history, 'loss', name='model1_loss')
