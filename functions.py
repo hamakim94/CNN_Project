@@ -137,6 +137,11 @@ def token_padded(sentences):
                                   padding=padding_type, truncating=truct_type)
   return padded
 
+def fasttext_vectorize(padded_sentences, max_len = 40):
+    ko_model = models.fasttext.load_facebook_model('cc.ko.300.bin')
+    paddedarray = np.array([ko_model.wv.word_vec(token) for x in padded_sentences for token in x])
+    final_array = paddedarray.reshape(-1,max_len,300)
+    return final_array
 
 #tokenizer fit 해서 pkl 형태로 저장
 def make_tokenizer_pkl():
