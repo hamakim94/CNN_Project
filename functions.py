@@ -93,40 +93,6 @@ def restore_model(model):
 
 
 
-def pad_sequence(sentences, padding_word="<PAD/>", max_len=max_len): #  오른쪽을 패딩주기
-    max_len = max_len
-    padded_sentences = []
-    for i in range(len(sentences)):
-        sentence = sentences[i]
-        if len(sentence)<=max_len:
-            num_padding = max_len - len(sentence)
-            new_sentence = sentence + [padding_word] * num_padding
-        else : new_sentence = sentence[:max_len]
-        padded_sentences.append(new_sentence)
-    return padded_sentences
-
-def fasttext_vectorize(padded_sentences, max_len = max_len):
-    ko_model = models.fasttext.load_facebook_model('cc.ko.300.bin')
-    paddedarray = np.array([ko_model.wv.word_vec(token) for x in padded_sentences for token in x])
-    final_array = paddedarray.reshape(-1,max_len,300)
-    return final_array
-
-def simple_fasttext_vectorize(padded_sentences, max_len = max_len):
-    with open('simple_ko_vec.pkl','rb') as fw:
-        simple_w2v= pickle.load(fw)
-    paddedarray=[]
-    try:
-        for x in padded_sentences:
-            for token in x:
-                paddedarray.append(simple_w2v[token])
-        # paddedarray = np.array([simple_w2v[token] for x in padded_sentences for token in x])
-    except:
-        paddedarray.append(simple_w2v['얘쁜'])## 사전에 없는 단어는 0행렬 만듬 ['얘쁜']의 행렬이 0행렬이라 이렇게 그냥 썼음
-    paddedarray = np.array(paddedarray)
-    final_array = paddedarray.reshape(-1,max_len,300)
-    return final_array
-
-
 def plot_graphs(history, string, name='model'):
     plt.plot(history.history[string])
     plt.plot(history.history['val_' + string])

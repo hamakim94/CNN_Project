@@ -11,7 +11,7 @@ import pandas as pd
 from gensim.models import Word2Vec
 import os
 from tensorflow import keras
-
+from functions import ready_callbacks
 
 ''' 
   You need to check the path of these.
@@ -42,13 +42,14 @@ def plot_graphs(history, string, name='model'):
     plt.ylabel(string)
     plt.title(name)
     plt.legend([string, 'val_' + string])
-    plt.show()
+    
     ##저장될 폴더생성
     result_dir = './result_file'
     if not os.path.exists(result_dir):
         os.makedirs(result_dir)
     plt.savefig(result_dir+'/{}.png'.format(name))
     print('<{}.png> result_file폴더에 결과 그래프 저장 완료'.format(name))
+    plt.show()
 
 def m2_load_token_and_label():
 
@@ -145,12 +146,7 @@ def m2_model():
   checkpoint_dir = './ckpt2'
   if not os.path.exists(checkpoint_dir):
       os.makedirs(checkpoint_dir)
-  callbacks = [
-      keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=0),   
-      keras.callbacks.ModelCheckpoint(
-          filepath=checkpoint_dir + '/ckpt2-loss={loss:.3f}',
-          save_freq=500)
-      ]
+  callbacks = ready_callbacks('ckpt2')
 
   history = model.fit(training_padded, training_labels, epochs=10, callbacks=callbacks, batch_size = batch_size, validation_data=(testing_padded, testing_labels))
   accuracy_graph = plot_graphs(history, 'accuracy',name='model2_accuracy')
