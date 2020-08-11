@@ -73,8 +73,8 @@ def model3_context(path, dropout = 0.5, embedding_dim = 100, max_length=30, batc
   input_shape = (max_length, )
   model_input = tf.keras.layers.Input(shape=input_shape)
   z = model_input
+  embedding = tf.keras.layers.Embedding(vocab_size, embedding_dim, input_length=max_length)(z)
   for sz in filter_sizes:
-      embedding = tf.keras.layers.Embedding(vocab_size, embedding_dim, input_length=max_length)(z)
       conv = tf.keras.layers.Conv1D(filters=num_filters,
                           kernel_size=sz,
                           padding="valid",
