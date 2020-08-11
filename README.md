@@ -78,7 +78,7 @@ def preprocessing(data):
     return sentences, label
 ```
 
-## 네이버 영화(한글) 데이터를 Konlpy.tag 에 Okt를 활용하여 Noun, Adjective, Alpha(영어), Verb만 뽑음
+## 네이버 영화(한글) 데이터를 Konlpy.tag 에 Okt를 활용하여 Noun, Adjective, Alpha(영어)만 뽑음
 
 konlpy의 okt를 이용해 포스 태깅, 명사, 형용사, 영어만 뽑음
 
@@ -91,7 +91,7 @@ for line in sentence:
     temp_sentence = okt.pos(line, norm=True, stem=True)
     print(temp_sentence)
     for i in temp_sentence:                             
-        if (i[1] == 'Noun' or i[1] == 'Adjective' or i[1] == 'Alpha' or i[1] == 'Verb'):                  
+        if (i[1] == 'Noun' or i[1] == 'Adjective' or i[1] == 'Alpha'):                  
             result.append(i[0])
         
     tokenized_sentence.append(result)
@@ -121,7 +121,7 @@ def make_tokenizer_pkl():
     max_length = 30
     vocab_size =20000
     training_sentences, training_labels, testing_sentences, testing_labels = m2_load_token_and_label()
-
+	# m2_load_token_and_label() -> (전처리, 라벨링 된 pkl 불러오는 함수)
     tokenizer = Tokenizer(num_words=vocab_size, oov_token=oov_tok)
     tokenizer.fit_on_texts(training_sentences)
     word_idx = tokenizer.index_word
@@ -148,7 +148,7 @@ def fasttext_vectorize(padded_sentences, max_len = 40):
 
 
 
-**해당 작업은 직접 bin을 불러들이기때문에, 오래걸려서 따로 벡터화해서 만들었음**
+**해당 작업은 직접 fasttext bin을 불러들이기때문에, 오래걸려서 따로 벡터화해서 만들었음**
 
 
 
@@ -191,7 +191,7 @@ def CNN_model_1(dropout=0.5, num_filters=100, hidden_dims = 10, filter_sizes = (
     embedding_matrix = np.zeros((vocab_size, embedding_dim))
     with open('simple_ko_vec.pkl','rb') as fw:
         ko_model= pickle.load(fw)
-    for word, idx in tokenizer.word_index.items():
+    for word, idx in tokenizer.word_index.items(): # word_index에 있는건만 FastText Vector 할당
         embedding_vector = ko_model[word] if word in ko_model else None
         if embedding_vector is not None:
             embedding_matrix[idx] = embedding_vector
@@ -374,7 +374,8 @@ def m2_tokenizer():
   testing_padded = pad_sequences(testing_sequences, maxlen=max_length, 
                                   padding=padding_type, truncating=truct_type)
   # word2vec weight 
-  vocab_size = len(word_idx) + 1
+  # tokenizer에 있는 단어 사전을 순회하면서 word2vec의 200차원 vector를 가져오기
+  vocab_size = len(word_idx) + 1 ## oov 때문
   embedding_dim = 200
 
   embedding_matrix = np.zeros((vocab_size, embedding_dim))
@@ -388,27 +389,8 @@ def m2_tokenizer():
   return training_padded, testing_padded, training_labels,testing_labels,embedding_matrix, vocab_size
 ```
 
-### word2vec weight 만들기(위의 함수에 포함된 부분)
-
-tokenizer에 있는 단어 사전을 순회하면서 word2vec의 200차원 vector를 가져오기
-
 ```python
-  # word2vec weight 
-  vocab_size = len(word_idx) + 1 # OOV를 포함하고 있기 때문에 1을 더해준다.
-  embedding_dim = 200
-
-  embedding_matrix = np.zeros((vocab_size, embedding_dim))
-  ko_model= Word2Vec.load('word2vec_movie.model')
-
-  for word, idx in tokenizer.word_index.items():
-      embedding_vector = ko_model[word] if word in ko_model else None
-      if embedding_vector is not None:
-          embedding_matrix[idx] = embedding_vector
-            
-```
-
-```python
-vocab_size
+vocab_size # 총 사전의 길이
 ```
 
 ```python
@@ -464,6 +446,7 @@ def m2_model():
   model_output = tf.keras.layers.Dense(1, activation="sigmoid")(z)
   model = tf.keras.Model(model_input, model_output)
 
+# compile용 변수들
   batch_size = 50
   num_epochs = 10
   min_word_count = 1
@@ -474,19 +457,13 @@ def m2_model():
   checkpoint_dir = './ckpt2'
   if not os.path.exists(checkpoint_dir):
       os.makedirs(checkpoint_dir)
-  callbacks = [
-      keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=0),   
-      keras.callbacks.ModelCheckpoint(
-          filepath=checkpoint_dir + '/ckpt2-loss={loss:.3f}',
-          save_freq=500)
-      ]
+  callbacks = ready_callbacks('ckpt2')
 
   history = model.fit(training_padded, training_labels, epochs=10, callbacks=callbacks, batch_size = batch_size, validation_data=(testing_padded, testing_labels))
   accuracy_graph = plot_graphs(history, 'accuracy',name='model2_accuracy')
   loss_graph= plot_graphs(history, 'loss',name='model2_loss')  
 
   return model, history, accuracy_graph,loss_graph
-
 ```
 
 ### 모델 컴파일 및 훈련
@@ -540,7 +517,7 @@ testing_labels = test['labels']
 ```python
 vocab_size = 20000      (20000개의 단어들만 쓸래)
 embedding_dim = 200     ( 200차원의 벡터로 )
-max_length = 53         (문장 최대 길이는 53으로)
+max_length = 30         (문장 최대 길이는 53으로)
 truct_type = 'post'
 padding_type = 'post'
 oov_tok = '<OOV>'
@@ -625,7 +602,10 @@ def model3_context(path, dropout = 0.5, embedding_dim = 100, max_length=30, batc
   context = 10
 
   model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-  history = model.fit(training_padded, training_labels, epochs=num_epochs, validation_data=(testing_padded, testing_labels))
+  early_stopping=tf.keras.callbacks.EarlyStopping(patience=2)
+  call_back = ready_callbacks(dir = 'ckpt3')
+  history = model.fit(training_padded, training_labels, epochs=num_epochs, validation_data=(testing_padded, testing_labels), callbacks=call_back, batch_size = batch_size)
+
 
   return model, history
 ```
@@ -696,8 +676,8 @@ https://github.com/hamakim94/CNN_Project/blob/master/functions.py
 
 | model1 | model2 | model3 |
 | ------ | ------ | ------ |
-| .8147  | 0.8209 | 0.8303 |
+| 0.8147 | 0.8209 | 0.8303 |
 
 1. .py, functions.py 만드는데 어려움이 많았음
-2. 실제로 sentence_embedding 방법이 가장 val_accuracy가 높았고, 최신 기술 순으로 높아짐
+2. 실제로 sentence_embedding 방법이 가장 val_accuracy가 높았고, 최신 기술 순으로 점수가 높음
 3. Stopwords 처리를 못했고, pos_tag의 종류들이 적음, 더 시도해보면 좋은 결과값이 나올것이라 예상
