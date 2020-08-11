@@ -49,7 +49,7 @@ def tokenize(sentence):
         temp_sentence = okt.pos(line, norm=True, stem=True) # 먼저 형태소 분리해서 리스트에 담고
 
         for i in temp_sentence:                             
-            if (i[1] == 'Noun' or i[1] == 'Adjective' or i[1] == 'Alpha' or i[1] == 'Verb' or i[1] == 'KoreanParticle' or i[1] == 'Number' ):                  
+            if (i[1] == 'Noun' or i[1] == 'Adjective' or i[1] == 'Alpha'):                  
                 result.append(i[0])
             
         tokenized_sentence.append(result)

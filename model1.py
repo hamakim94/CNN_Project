@@ -1,11 +1,5 @@
-import pickle
+from functions import input_preprocessing, preprocessing, CNN_model_1, input_preprocessing2, ready_callbacks, plot_graphs
 import pandas as pd
-from tensorflow import keras
-import tensorflow as tf
-import matplotlib.pyplot as plt
-import functions as fc
-from functions import input_preprocessing, preprocessing, CNN_model_1, input_preprocessing2, ready_callbacks
-    
     ########################################
     ###   <data 준비시키기 일반 version>   ###
     ########################################
@@ -23,8 +17,8 @@ from functions import input_preprocessing, preprocessing, CNN_model_1, input_pre
     ###   <data 준비시키기 시간절약 version>    ###
     ###  토큰화되어 저장한 train test data이용  ###
     ###########################################
-df_train = pd.read_pickle('token_train_data_ver2.pkl')
-df_test = pd.read_pickle('token_test_data_ver2.pkl')
+df_train = pd.read_pickle('token_train_data.pkl')
+df_test = pd.read_pickle('token_test_data.pkl')
 
 train_data, train_lable = df_train['tokens'], df_train['labels']
 test_data, test_lable = df_test['tokens'], df_test['labels']
@@ -53,5 +47,5 @@ if __name__ == "__main__":
     #CNN 모델에 fit한 history, string: ('accuracy'or'loss'), name : 해당이름으로 차트title과 차트파일명이 됨
     #result_file폴더에 결과 그래프 저장
 
-    fc.plot_graphs(history, 'accuracy',name='model1_acc')
-    fc.plot_graphs(history, 'loss', name='model1_loss')
+    plot_graphs(history, 'accuracy',name='model1_acc')
+    plot_graphs(history, 'loss', name='model1_loss')
