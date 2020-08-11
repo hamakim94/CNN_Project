@@ -102,7 +102,6 @@ def model3_context(path, dropout = 0.5, embedding_dim = 100, max_length=30, batc
   return model, history
 
 model, history = model3_context(path, num_epochs = 10)
-SVG(model_to_dot(model, show_layer_names=True, dpi=65).create(prog='dot', format='svg'))
 
 # plot 출력 
 def plot_accuracy_graphs(history, string='accuracy'):
