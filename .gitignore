@@ -1,6 +1,7 @@
 *.data*
 ckpt1/*
-
+ckpt2/*
+ckpt3/*
 cc.ko.300.vec
 cc.ko.300.bin
 *.bin
