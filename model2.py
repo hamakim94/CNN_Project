@@ -24,8 +24,8 @@ from functions import ready_callbacks
 '''
 
 def naver_w2v():
-  df_train = pd.read_pickle('token_train_data.pkl')
-  df_test = pd.read_pickle('token_test_data.pkl')
+  df_train = pd.read_pickle('token_train_data_ver2.pkl')
+  df_test = pd.read_pickle('token_test_data_ver2.pkl')
   df = pd.concat([df_train, df_test], axis = 0, ignore_index=True)
 
   token = [i  for x in df['tokens'] for i in x]
@@ -53,8 +53,8 @@ def plot_graphs(history, string, name='model'):
 
 def m2_load_token_and_label():
 
-  test = pd.read_pickle("token_test_data.pkl")
-  train = pd.read_pickle("token_train_data.pkl")
+  train = pd.read_pickle('token_train_data_ver2.pkl')
+  test = pd.read_pickle('token_test_data_ver2.pkl')
 
   training_sentences, training_labels = train['tokens'], train['labels']
   testing_sentences, testing_labels = test['tokens'], test['labels']

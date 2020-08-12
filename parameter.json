@@ -1,7 +1,7 @@
 {
 	"oov_tok": "<OOV>",
-	"truct_type": "post",
-	"padding_type": "post",
-	"max_length": 30,
+	"trunc_type": "post",
+	"pad_type": "post",
+	"max_len": 30,
 	"vocab_size": 20000
 }
