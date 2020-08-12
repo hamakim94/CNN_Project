@@ -1,8 +1,8 @@
 # Convolution Neural Networks for Sentence Classification 
 
-![version](https://img.shields.io/badge/python-3.6-green) {:.alignright}
+![version](https://img.shields.io/badge/python-3.6-green){:.alignright}
 
-##### contributers  ![name](https://img.shields.io/badge/-김민균-black) ![https://img.shields.io/badge/-%EC%9D%B4%EC%86%8C%EC%97%B0-black](https://img.shields.io/badge/-이소연-black) ![name](https://img.shields.io/badge/-이창윤-black) ![name](https://img.shields.io/badge/-나서연-black)
+#### contributers  ![name](https://img.shields.io/badge/-김민균-black) ![https://img.shields.io/badge/-%EC%9D%B4%EC%86%8C%EC%97%B0-black](https://img.shields.io/badge/-이소연-black) ![name](https://img.shields.io/badge/-이창윤-black) ![name](https://img.shields.io/badge/-나서연-black)
 
 
 
