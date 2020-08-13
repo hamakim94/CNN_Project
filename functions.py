@@ -118,7 +118,7 @@ def ready_callbacks(dir = './ckpt1'):
     if not os.path.exists(checkpoint_dir):
         os.makedirs(checkpoint_dir)
     callbacks = [
-        keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=0),
+        keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=4),
         # This callback saves a SavedModel every 100 batches.
         # We include the training loss in the folder name.
         keras.callbacks.ModelCheckpoint(
@@ -447,4 +447,33 @@ def plot_loss_graphs(history, string='loss'):
 # plot_accuracy_graphs(history)
 # plot_loss_graphs(history)
     
+def ready_embedding_matrix(tokenizer='tokenizer.pickle',word2vec='simple_ko_vec.pkl'):
+    with open(tokenizer,'rb') as f:
+        tokenizer = pickle.load(f)
 
+    word_index = tokenizer.word_index
+#embedding_matrix 생성 fasttext기반 w2v
+    vocab_size = len(word_index) + 1
+    embedding_dim = 300
+
+    embedding_matrix = np.zeros((vocab_size, embedding_dim))
+    with open(word2vec,'rb') as fw:
+        ko_model= pickle.load(fw)
+    for word, idx in tokenizer.word_index.items():
+        embedding_vector = ko_model[word] if word in ko_model else None
+        if embedding_vector is not None:
+            embedding_matrix[idx] = embedding_vector
+    return embedding_matrix
+
+def LSTM_model(max_len=max_len, embedding_matrix=0):
+    model = tf.keras.Sequential([
+        tf.keras.layers.Embedding(embedding_matrix.shape[0], embedding_matrix.shape[1],
+                     input_length=max_len, weights =[embedding_matrix], trainable = False),
+        tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(64, return_sequences=True)),
+        tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(64)),
+        tf.keras.layers.Dense(64, activation='relu',kernel_regularizer=keras.regularizers.l2(0.003), bias_regularizer=keras.regularizers.l2(0.003)),
+        tf.keras.layers.Dropout(0.8),
+        tf.keras.layers.Dense(1, activation='sigmoid')
+    ])
+    model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
+    return model
