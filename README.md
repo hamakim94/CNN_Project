@@ -23,6 +23,12 @@ model test : test.py 에 각각의 모델을 선택하여 학습된 모델을 �
 
 evaluate.py를 이용하여 blue score를 계산해 볼수 있다
 
+```
+$ python evaluate.py --model 학습된MODEL --tokenizer data/tokenizer.pickle --param data/parameter.json --dataset data/review.tsv
+```
+
+
+
 
 
 # 개요
