@@ -58,7 +58,7 @@ def tokenize(sentence):
 
 # 밑에꺼랑 같은데 영화리뷰 토큰화된거 사용하려고 만듬            
 def input_preprocessing2(tokens):
-    with open('tokenizer.pickle','rb') as f:
+    with open('data/tokenizer.pickle','rb') as f:
         tokenizer = pickle.load(f)
 
     sequences = tokenizer.texts_to_sequences(tokens)
@@ -71,7 +71,7 @@ def input_preprocessing2(tokens):
 def input_preprocessing(sentences):
     tokens = tokenize(sentences)
     ######tokenizer 불러오기 vocab size = 20000으로 되어있는 거임
-    with open('tokenizer.pickle','rb') as f:
+    with open('data/tokenizer.pickle','rb') as f:
         tokenizer = pickle.load(f)
 
     sequences = tokenizer.texts_to_sequences(tokens)
@@ -156,7 +156,7 @@ def make_tokenizer_pkl():
     tokenizer.fit_on_texts(training_sentences)
     word_idx = tokenizer.index_word
 
-    with open('tokenizer.pickle', 'wb') as handle:
+    with open('data/tokenizer.pickle', 'wb') as handle:
         pickle.dump(tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
     print('tokenizer 저장완료')
 ######################################
@@ -165,7 +165,7 @@ def make_tokenizer_pkl():
 def CNN_model_1(dropout=0.5, num_filters=100, hidden_dims = 10, filter_sizes = (3, 4, 5), l2_norm = 0.003, max_len=30):
     
 #저장되어있는 tokenizer 로드하기
-    with open('tokenizer.pickle','rb') as f:
+    with open('data/tokenizer.pickle','rb') as f:
         tokenizer = pickle.load(f)
 
     word_index = tokenizer.word_index
@@ -174,7 +174,7 @@ def CNN_model_1(dropout=0.5, num_filters=100, hidden_dims = 10, filter_sizes = (
     embedding_dim = 300
 
     embedding_matrix = np.zeros((vocab_size, embedding_dim))
-    with open('simple_ko_vec.pkl','rb') as fw:
+    with open('data/simple_ko_vec.pkl','rb') as fw:
         ko_model= pickle.load(fw)
     for word, idx in tokenizer.word_index.items():
         embedding_vector = ko_model[word] if word in ko_model else None
@@ -447,7 +447,7 @@ def plot_loss_graphs(history, string='loss'):
 # plot_accuracy_graphs(history)
 # plot_loss_graphs(history)
     
-def ready_embedding_matrix(tokenizer='tokenizer.pickle',word2vec='simple_ko_vec.pkl'):
+def ready_embedding_matrix(tokenizer='data/tokenizer.pickle',word2vec='data/simple_ko_vec.pkl'):
     with open(tokenizer,'rb') as f:
         tokenizer = pickle.load(f)
 
