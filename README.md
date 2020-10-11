@@ -3,6 +3,26 @@
 
 #### contributers  ![name](https://img.shields.io/badge/-김민균-black) ![https://img.shields.io/badge/-%EC%9D%B4%EC%86%8C%EC%97%B0-black](https://img.shields.io/badge/-이소연-black) ![name](https://img.shields.io/badge/-이창윤-black) ![name](https://img.shields.io/badge/-나서연-black)
 
+CNN모델을 기반으로 다양한 embedding 방식을 이용하여 결과를 비교해 본 프로젝트 입니다.
+
+
+
+### Reaquirements
+
+- festtext사이트에서 한글 wordvector 다운로드 (cc.ko.300.bin)
+
+- tensorflow
+
+
+
+### Usage
+
+model 학습 :  model1.py / model2.py/ model3.py 실행 하여 학습 진행하면 각각의 이름의 폴더에 model이 저장된다.
+
+model test : test.py 에 각각의 모델을 선택하여 학습된 모델을 불러와 임의로 생성한 리뷰문서에대한 평가를 해 볼 수 있다
+
+evaluate.py를 이용하여 blue score를 계산해 볼수 있다
+
 
 
 # 개요
