@@ -321,13 +321,6 @@ Epoch 4/10
 <model1_loss.png> result_file폴더에 결과 그래프 저장 완료
 ```
 
-<p align="center">
-  <img width="460" height="350" src="https://github.com/hamakim94/CNN_Project/blob/master/result_file/model1_acc.png?raw=true"><img width="460" height="350" src="https://github.com/hamakim94/CNN_Project/blob/master/result_file/model1_loss.png?raw=true">
-</p>
-
-
-
-
 
 
 
